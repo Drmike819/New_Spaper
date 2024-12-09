@@ -1,0 +1,33 @@
+.img-user{
+    height: 20px;
+    width: 20px;
+    border-radius: 50px;
+}
+
+img{
+    height: 20px;
+    width: 20px;
+    border-radius: 50px;
+}
+
+/* Modo Oscuro */
+body.dark-mode {
+    background-color: #121212;
+    color: white;
+}
+
+.card.dark-mode {
+    background-color: #333;
+    color: white;
+}
+
+.navbar-dark-mode {
+    background-color: #444;
+}
+
+.btn-outline-dark {
+    background-color: #444;
+    color: white;
+}
+
+/* Otras personalizaciones de modo oscuro */

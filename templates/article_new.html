@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% load static %}
+
+
+{% block content %}
+    <h1>New Article</h1>
+    
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Formulario principal del artículo -->
+        {{ form|crispy }}
+        
+        <!-- FormSet de imágenes -->
+        <h3>Images</h3>
+        {{ formset.management_form }}
+        
+        {% for form in formset %}
+            <div class="image-form mb-3">
+                {{ form|crispy }}
+                <!-- Opcional: Eliminar imagen solo en la edición -->
+                {% if form.instance.pk %}
+                    <label for="{{ form.DELETE.id_for_label }}">Remove</label>
+                    {{ form.DELETE }}
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <!-- Botón para añadir imágenes -->
+        <button type="button" class="btn btn-secondary" onclick="addImageForm()">Add another image</button>
+        
+        <!-- Botón de guardar -->
+        <button class="btn btn-success ml-2" type="submit">Save</button>
+    </form>
+
+    <!-- JavaScript para añadir formularios de imagen dinámicamente -->
+    <script>
+        src="{% static 'js/img.js' %}"
+    </script>
+{% endblock content %}

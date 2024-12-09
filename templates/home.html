@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Home {% endblock title %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        {% for article in articles %}
+            <div class="card pb-3 dropdown">
+                <div class="card-header d-flex">
+                    <span class="font-weight-bold">
+                        {% if article.author == user %}
+                            <a href="{% url 'article_edit' article.pk %}">{{ article.title }}</a>
+                        {% else %}
+                            {{ article.title }}
+                        {% endif %}
+                    </span>&middot;
+                    <span class="text-muted">by {{ article.author }} | {{ article.date }}</span>
+
+                    {% if article.author.username == request.user.username %}
+                        <!-- Botón con tres puntos -->
+                        <button class="btn btn-secondary ms-auto" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            &#x22EE; <!-- Tres puntos verticales -->
+                        </button>
+                
+                        <!-- Opciones del menú desplegable -->
+                        <ul class="dropdown-menu text-end" aria-labelledby="dropdownMenuButton">
+                            <li>
+                                <a class="dropdown-item link-iditar-eliminar" href="{% url 'article_edit' article.pk %}">
+                                    Edit
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item link-iditar-eliminar" href="{% url 'article_delete' article.pk %}">
+                                    Delete
+                                </a>
+                            </li>
+                        </ul>
+                    {% endif %}
+                </div>
+                
+                <div class="card-body">
+                    {% if article.article_images_related.all %}
+                        <div id="carousel{{ article.id }}" class="carousel slide pt-3" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                {% for image in article.article_images_related.all %}
+                                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                        <img src="{{ image.image.url }}" class="d-block w-100 img-article" style="height: 400px; object-fit: cover; margin: 0 auto;" alt="Article image">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% if article.article_images_related.count > 1 %}
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carousel{{ article.id }}" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carousel{{ article.id }}" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <p>No images available for this article.</p>
+                    {% endif %}
+                    <p class="pt-5 ps-5 pe-5 text-justify text-right">{{ article.body }}</p>
+                    
+                    <!-- {% if article.author.username == request.user.username %}
+                        <a style=" color: transparent;" href="{% url 'article_edit' article.pk %}">
+                            Edit
+                            <img style="width: 25px;" src="{% static 'img/editar.png' %}" alt="editar el post">
+                        </a>
+                        <a style=" color: transparent;" href="{% url 'article_delete' article.pk %}">
+                            Edit
+                            <img style="height: 45px; width: 25px;" src="{% static 'img/eliminar.png' %}" alt="eliminar el post">
+                        </a>
+                    {% endif %} -->
+                </div>
+
+                <div class="card-footer text-start">
+                    <!-- Botón para mostrar u ocultar comentarios -->
+                    <button class="btn btn-outline-secondary Comentarios" type="button" data-bs-toggle="collapse" data-bs-target="#commentsSection{{ article.id }}" aria-expanded="false" aria-controls="commentsSection">
+                        Comentarios
+                    </button>
+                
+                    <!-- Sección de comentarios colapsable -->
+                    <div class="collapse" id="commentsSection{{ article.id }}">
+                        {% for comment in article.comment_set.all %}
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <div class="comment p-2">
+                                            <img style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid img-user" 
+                                                src="{% if comment.author.image and comment.author.image.url %}{{ comment.author.image.url }}{% else %}{% static 'img/user.png' %}{% endif %}" 
+                                                alt="{{ comment.author.username }}">
+                                            <span class="font-weight-bold">{{ comment.author }} &middot;</span>
+                                            <span>{{ comment.comment }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-3">
+                                        {% if comment.author == user %}
+                                            <div class="dropdown d-inline text-end">
+                                                <button class="btn btn-sm puntos" type="button" id="dropdownMenuButton{{ comment.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    &#x22EE;
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ comment.id }}">
+                                                    <li><a class="dropdown-item" href="{% url 'comment_edit' comment.pk %}">Editar</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="{% url 'comment_delete' comment.pk %}">Eliminar</a></li>
+                                                </ul>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <h4>Add a comment</h4>
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <input type="hidden" name="article_id" value="{{ article.id }}">
+                            <button class="btn btn-success ml-2" type="submit">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <br />
+        {% endfor %}
+    {% else %}
+        <p>You are not logged in</p>
+        <a href="{% url 'login' %}">Log In</a>
+        <a href="{% url 'signup' %}">Sign Up</a>
+    {% endif %}
+
+{% endblock content %}
+

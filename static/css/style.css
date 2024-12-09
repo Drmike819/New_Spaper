@@ -1,0 +1,93 @@
+
+.img-user{
+    height: 20px;
+    width: 20px;
+    border-radius: 50px;
+}
+
+.img-user{
+    height: 25px !important;
+    width: 25px !important;
+    border-radius: 50px !important;
+}
+
+a:visited {
+    color: black !important; /* Cambia el color del enlace visitado */
+}
+
+.img-article{
+    width: 500px !important;
+    height: 350px !important;
+}
+
+
+/* Modo Oscuro */
+
+body.dark-mode #modoJH{
+    border-color: rgb(255, 193, 7)!important;
+    color:black !important;
+}
+
+/* body.dark-mode #modoJH:hover{
+    background-color: rgb(243, 171, 3) !important;
+} */
+
+body.dark-mode {
+    background-color: #121212;
+    color: white !important;
+}
+
+body.dark-mode a{
+    color: white !important;
+}
+
+body.dark-mode form p{
+    color: white !important;
+}
+
+body.dark-mode form{
+    color: white !important;
+}
+
+body.dark-mode .card{
+    background-color: rgb(0, 0, 0) !important;
+    border-bottom: solid 1px white !important;
+}
+
+body.dark-mode .card-body p{
+    color: white;
+}
+body.dark-mode .card-header a{
+    color: white !important;
+    text-decoration: none;
+}
+
+body.dark-mode .card-header span{
+    color: white !important;
+}
+
+body.dark-mode .card-footer{
+    color: white !important;
+}
+
+body.dark-mode ul li a{
+    color: black !important;
+}
+
+body.dark-mode .puntos{
+    color: white;
+}
+
+body.dark-mode .text-nav-new{
+    color: white !important;
+}
+
+body.dark-mode ul .link-iditar-eliminar{
+    color: #121212 !important;
+}
+
+/* body.dark-mode .Comentarios{
+    color:gray !important;
+} */
+
+

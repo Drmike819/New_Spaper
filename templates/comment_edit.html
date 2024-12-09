@@ -1,0 +1,15 @@
+<!-- formulario para editar un comentario -->
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Eliminar comentario</h1>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-success ml-2" type="submit">Confirm</button>  
+    </form>
+    <a href="{% url 'home' %}">Cancelar</a>
+
+{% endblock content %}

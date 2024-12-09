@@ -1,0 +1,46 @@
+<!-- templates/article_edit.html -->
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <h1>Edit Article</h1>
+  
+  <form action="" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      <!-- Formulario principal del artículo -->
+      {{ form|crispy }}
+      
+      <!-- FormSet de imágenes -->
+      <h3>Images</h3>
+      {{ formset.management_form }}
+      
+      {% for form in formset %}
+          <div class="image-form mb-3">
+              {{ form|crispy }}
+              <!-- Opción para eliminar imagen en edición -->
+              {% if form.instance.pk %}
+                  <label for="{{ form.DELETE.id_for_label }}">Remove</label>
+                  {{ form.DELETE }}
+              {% endif %}
+          </div>
+      {% endfor %}
+      
+      <!-- Botón para añadir imágenes -->
+      <button type="button" class="btn btn-secondary" onclick="addImageForm()">Add another image</button>
+      
+      <!-- Botón de actualizar -->
+      <button class="btn btn-info ml-2" type="submit">Update</button>
+  </form>
+  
+  <!-- JavaScript para añadir formularios de imagen dinámicamente -->
+  <script>
+      function addImageForm() {
+          var newForm = document.querySelector('.image-form').cloneNode(true);
+          newForm.querySelector('input[type="file"]').value = '';
+          newForm.querySelector('input[type="checkbox"]').checked = false;
+          document.querySelector('form').insertBefore(newForm, document.querySelector('button[onclick="addImageForm()"]'));
+      }
+  </script>
+{% endblock content %}
