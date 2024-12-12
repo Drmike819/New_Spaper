@@ -91,3 +91,81 @@ body.dark-mode ul .link-iditar-eliminar{
 } */
 
 
+.container_carru {
+    position: relative;
+    height: 500px;
+    overflow: hidden;
+}
+
+#actions {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    z-index: 201;
+    transform: translateY(-50%);
+}
+
+#arrowrigth .arrowrigth,
+#arrowleft .arrowleft {
+    cursor: pointer;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    z-index: 201;
+}
+
+#arrowrigth .arrowrigth {
+    right: 20px;
+    transform: rotate(270deg);
+}
+
+#arrowleft .arrowleft {
+    left: 20px;
+    transform: rotate(90deg);
+}
+
+.carousel-item {
+    position: relative;
+    /* width: 100%;
+    height: 100%; */
+    perspective: 120px;  /* Aumentar para mayor efecto 3D */
+    display: flex;  /* Usar flexbox para alineación de imágenes */
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-item {
+    position: absolute;
+    /* top: 50%; */
+    transform-style: preserve-3d;
+    transition: transform 1s ease, opacity 1s ease;
+    /* opacity: 0;  Comienza con opacidad 0 para la animación */
+}
+
+.carousel-imagen{
+    margin-top: 7%;
+    width: 45%;
+    height: 60%;
+}
+.img_center {
+    transform: translateX(-50%) translateZ(200px) scale(1);
+    left: 50%;
+    opacity: 1;
+    z-index: 3;  /* Más alto para que se muestre sobre las otras imágenes */
+}
+
+.img_left {
+    transform: translateX(-150%) translateZ(100px) scale(0.8);
+    left: 50%;
+    opacity: 0.5;
+    z-index: 2;
+}
+
+.img_rigth {
+    transform: translateX(50%) translateZ(100px) scale(0.8);
+    left: 50%;
+    opacity: 0.5;
+    z-index: 2;
+}
+
+

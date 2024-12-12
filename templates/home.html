@@ -42,42 +42,40 @@
                 </div>
                 
                 <div class="card-body">
-                    {% if article.article_images_related.all %}
-                        <div id="carousel{{ article.id }}" class="carousel slide pt-3" data-bs-ride="carousel">
-                            <div class="carousel-inner">
+                    {% if article.article_images_related.exists %}
+                        <!-- Carrusel de imágenes -->
+                        <div class="container_carru" id="carousel-{{ article.id }}">
+                            <div id="actions-{{ article.id }}">
+                                <a id="arrowrigth-{{ article.id }}">
+                                    <img src="https://develover.com.mx/recursos_codepen/arrow.png" class="arrowrigth">
+                                </a>
+                                <a id="arrowleft-{{ article.id }}">
+                                    <img src="https://develover.com.mx/recursos_codepen/arrow.png" class="arrowleft">
+                                </a>
+                            </div>
+                            <div id="items-{{ article.id }}">
                                 {% for image in article.article_images_related.all %}
-                                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                        <img src="{{ image.image.url }}" class="d-block w-100 img-article" style="height: 400px; object-fit: cover; margin: 0 auto;" alt="Article image">
-                                    </div>
+                                    <img src="{{ image.image.url }}" draggable="false" class="carousel-item carousel-imagen {% if forloop.first %}img_center{% else %}img_left{% endif %}" alt="Article Image">
                                 {% endfor %}
                             </div>
-                            {% if article.article_images_related.count > 1 %}
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carousel{{ article.id }}" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carousel{{ article.id }}" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            {% endif %}
+                            <!-- Indicadores del carrusel -->
+                            <div id="indicators-{{ article.id }}" class="d-flex justify-content-center mt-3">
+                                {% for image in article.article_images_related.all %}
+                                    <button class="indicator" data-index="{{ forloop.counter0 }}"></button>
+                                {% endfor %}
+                            </div>
                         </div>
+                        
+                        
                     {% else %}
-                        <p>No images available for this article.</p>
+                        <!-- Mensaje si no hay imágenes -->
+                        <p class="text-center text-muted">No images available for this article.</p>
                     {% endif %}
-                    <p class="pt-5 ps-5 pe-5 text-justify text-right">{{ article.body }}</p>
-                    
-                    <!-- {% if article.author.username == request.user.username %}
-                        <a style=" color: transparent;" href="{% url 'article_edit' article.pk %}">
-                            Edit
-                            <img style="width: 25px;" src="{% static 'img/editar.png' %}" alt="editar el post">
-                        </a>
-                        <a style=" color: transparent;" href="{% url 'article_delete' article.pk %}">
-                            Edit
-                            <img style="height: 45px; width: 25px;" src="{% static 'img/eliminar.png' %}" alt="eliminar el post">
-                        </a>
-                    {% endif %} -->
+                
+                    <!-- Texto del artículo -->
+                    <p class="pt-5 ps-5 pe-5 text-justify">{{ article.body }}</p>
                 </div>
+                
 
                 <div class="card-footer text-start">
                     <!-- Botón para mostrar u ocultar comentarios -->
