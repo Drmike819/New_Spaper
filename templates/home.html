@@ -29,12 +29,12 @@
                         <ul class="dropdown-menu text-end" aria-labelledby="dropdownMenuButton">
                             <li>
                                 <a class="dropdown-item link-iditar-eliminar" href="{% url 'article_edit' article.pk %}">
-                                    Edit
+                                    <p>Edit</p>
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item link-iditar-eliminar text-danger" href="{% url 'article_delete' article.pk %}">
-                                    Delete
+                                <a class="dropdown-item link-iditar-eliminar " href="{% url 'article_delete' article.pk %}">
+                                    <p class="text-danger">Delete</p>
                                 </a>
                             </li>
                         </ul>
@@ -93,8 +93,8 @@
                                                     &#x22EE;
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ comment.id }}">
-                                                    <li><a class="dropdown-item" href="{% url 'comment_edit' comment.pk %}">Edit</a></li>
-                                                    <li><a class="dropdown-item text-danger" href="{% url 'comment_delete' comment.pk %}">Delete</a></li>
+                                                    <li><a class="dropdown-item" href="{% url 'comment_edit' comment.pk %}"><p>Edit</p></a></li>
+                                                    <li><a class="dropdown-item text-danger" href="{% url 'comment_delete' comment.pk %}"> <p class="text-danger">Delete</p></a></li>
                                                 </ul>
                                             </div>
                                         {% endif %}
