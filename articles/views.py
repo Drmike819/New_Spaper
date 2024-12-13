@@ -180,7 +180,8 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     # redirige al template home
     def get_success_url(self):
         # Redirigir a la página del artículo después de eliminar el comentario
-        return reverse_lazy('home', kwargs={'pk': self.object.article.pk})
+        return reverse_lazy('home')
+        # return reverse_lazy('article_detail', kwargs={'pk': self.object.article.pk})
 
 # class ArticlesList(LoginRequiredMixin, ListView):
 #     model = Article

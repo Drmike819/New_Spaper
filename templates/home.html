@@ -33,7 +33,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item link-iditar-eliminar" href="{% url 'article_delete' article.pk %}">
+                                <a class="dropdown-item link-iditar-eliminar text-danger" href="{% url 'article_delete' article.pk %}">
                                     Delete
                                 </a>
                             </li>
@@ -45,31 +45,19 @@
                     {% if article.article_images_related.exists %}
                         <!-- Carrusel de imágenes -->
                         <div class="container_carru" id="carousel-{{ article.id }}">
-                            <div id="actions-{{ article.id }}">
-                                <a id="arrowrigth-{{ article.id }}">
-                                    <img src="https://develover.com.mx/recursos_codepen/arrow.png" class="arrowrigth">
-                                </a>
-                                <a id="arrowleft-{{ article.id }}">
-                                    <img src="https://develover.com.mx/recursos_codepen/arrow.png" class="arrowleft">
-                                </a>
+                            <div class="actions" id="actions-{{ article.id }}">
+                                <a class="arrow btn" id="arrowleft-{{ article.id }}">⏪</a>
+                                <a class="arrow btn" id="arrowrigth-{{ article.id }}">⏩</a>
                             </div>
-                            <div id="items-{{ article.id }}">
+                            <div class="items" id="items-{{ article.id }}">
                                 {% for image in article.article_images_related.all %}
-                                    <img src="{{ image.image.url }}" draggable="false" class="carousel-item carousel-imagen {% if forloop.first %}img_center{% else %}img_left{% endif %}" alt="Article Image">
+                                    <img src="{{ image.image.url }}" style="text-decoration: none;" draggable="false" class="carousel-item carousel-imagen {% if forloop.first %}img_center{% else %}img_left{% endif %}" alt="Article Image">
                                 {% endfor %}
                             </div>
-                            <!-- Indicadores del carrusel -->
-                            <div id="indicators-{{ article.id }}" class="d-flex justify-content-center mt-3">
-                                {% for image in article.article_images_related.all %}
-                                    <button class="indicator" data-index="{{ forloop.counter0 }}"></button>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        
-                        
+                        </div>                        
                     {% else %}
                         <!-- Mensaje si no hay imágenes -->
-                        <p class="text-center text-muted">No images available for this article.</p>
+                        <p class="text-justify">No images available for this article.</p>
                     {% endif %}
                 
                     <!-- Texto del artículo -->
@@ -105,8 +93,8 @@
                                                     &#x22EE;
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ comment.id }}">
-                                                    <li><a class="dropdown-item" href="{% url 'comment_edit' comment.pk %}">Editar</a></li>
-                                                    <li><a class="dropdown-item text-danger" href="{% url 'comment_delete' comment.pk %}">Eliminar</a></li>
+                                                    <li><a class="dropdown-item" href="{% url 'comment_edit' comment.pk %}">Edit</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="{% url 'comment_delete' comment.pk %}">Delete</a></li>
                                                 </ul>
                                             </div>
                                         {% endif %}
