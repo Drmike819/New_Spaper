@@ -86,7 +86,7 @@ body.dark-mode ul .link-iditar-eliminar{
     color: #121212 !important;
 }
 
-body.dark-mode .cabeza{
+body.dark-mode .header-and-footer{
     background-color: rgb(42, 42, 42) !important;
 }
 /* body.dark-mode .Comentarios{
@@ -176,4 +176,17 @@ body.dark-mode .cabeza{
     z-index: 2;
 }
 
+.img_center_single {
+    transform: translateX(-50%) translateZ(200px) scale(1);
+    left: 50%;
+    opacity: 1;
+    z-index: 3; /* La imagen debe tener prioridad */
+}
 
+/* Imágenes adicionales (escondidas) */
+.carousel-item.additional {
+    transform: translateX(0) translateZ(-300px) scale(0.5); /* Detrás y más pequeñas */
+    opacity: 0; /* Ocultas visualmente */
+    z-index: 1; /* Muy detrás */
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}

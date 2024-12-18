@@ -165,7 +165,8 @@ class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return comment.author == self.request.user
     # redirige al template home
     def get_success_url(self):
-        return reverse_lazy('home', kwargs={'pk':self.object.article.pk})
+        return reverse_lazy('home')
+        # return reverse_lazy('home', kwargs={'pk':self.object.article.pk})
 
 
 class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

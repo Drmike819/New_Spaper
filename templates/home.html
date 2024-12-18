@@ -8,8 +8,8 @@
 {% block content %}
     {% if user.is_authenticated %}
         {% for article in articles %}
-            <div class="card pb-3 dropdown">
-                <div class="card-header d-flex  cabeza">
+            <div class="card mt-3 dropdown">
+                <div class="card-header d-flex  header-and-footer">
                     <span class="font-weight-bold b">
                         <img style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid img-user me-1" 
                             src="{% if article.author.image and article.author.image.url %}{{ article.author.image.url }}{% else %}{% static 'img/user.png' %}{% endif %}" alt="{{ article.author }}">
@@ -47,11 +47,19 @@
                                 <a class="arrow btn" id="arrowrigth-{{ article.id }}">⏩</a>
                             </div>
                             <div class="items" id="items-{{ article.id }}">
-                                {% for image in article.article_images_related.all %}
-                                    <img src="{{ image.image.url }}" style="text-decoration: none;" draggable="false" class="carousel-item carousel-imagen {% if forloop.first %}img_center{% else %}img_left{% endif %}" alt="Article Image">
-                                {% endfor %}
+                                {% with article.article_images_related.all|length as image_count %}
+                                    {% for image in article.article_images_related.all %}
+                                        <img src="{{ image.image.url }}" 
+                                             class="carousel-item carousel-imagen 
+                                                    {% if image_count == 1 %}img_center_single{% 
+                                                    elif forloop.first %}img_center{% 
+                                                    else %}img_left{% endif %}" 
+                                             alt="Article Image">
+                                    {% endfor %}
+                                {% endwith %}
                             </div>
-                        </div>                        
+                        </div>
+                                               
                     {% else %}
                         <!-- Mensaje si no hay imágenes -->
                         <p class="text-justify">No images available for this article.</p>
@@ -62,7 +70,7 @@
                 </div>
                 
 
-                <div class="card-footer text-start">
+                <div class="card-footer text-start header-and-footer">
                     <!-- Botón para mostrar u ocultar comentarios -->
                     <button class="btn btn-secondary Comentarios" type="button" data-bs-toggle="collapse" data-bs-target="#commentsSection{{ article.id }}" aria-expanded="false" aria-controls="commentsSection">
                         Comentarios
@@ -70,6 +78,7 @@
                 
                     <!-- Sección de comentarios colapsable -->
                     <div class="collapse" id="commentsSection{{ article.id }}">
+                        <!-- Recorre y imprime los comentarios del articulo mostrando la imagen de usuario el nombre y el comentario -->
                         {% for comment in article.comment_set.all %}
                             <div class="container-fluid">
                                 <div class="row">
@@ -84,6 +93,7 @@
                                     </div>
 
                                     <div class="col-3">
+                                        <!-- Indicaa que si el usuario que esta logeado es el creador puede ver las opciones de eliminar y editar -->
                                         {% if comment.author == user %}
                                             <div class="dropdown d-inline text-end">
                                                 <button class="btn btn-sm puntos" type="button" id="dropdownMenuButton{{ comment.id }}" data-bs-toggle="dropdown" aria-expanded="false">
@@ -99,6 +109,7 @@
                                 </div>
                             </div>
                         {% endfor %}
+                        <!-- Formulari para añadir un comentario -->
                         <h4>Add a comment</h4>
                         <form method="POST">
                             {% csrf_token %}
