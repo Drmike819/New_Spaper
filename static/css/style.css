@@ -86,6 +86,9 @@ body.dark-mode ul .link-iditar-eliminar{
     color: #121212 !important;
 }
 
+body.dark-mode .cabeza{
+    background-color: rgb(42, 42, 42) !important;
+}
 /* body.dark-mode .Comentarios{
     color:gray !important;
 } */
@@ -162,14 +165,14 @@ body.dark-mode ul .link-iditar-eliminar{
 .img_left {
     transform: translateX(-150%) translateZ(100px) scale(0.8);
     left: 50%;
-    opacity: 0.5;
+    opacity: 0.7;
     z-index: 2;
 }
 
 .img_rigth {
     transform: translateX(50%) translateZ(100px) scale(0.8);
     left: 50%;
-    opacity: 0.5;
+    opacity: 0.7;
     z-index: 2;
 }
 

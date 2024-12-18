@@ -9,15 +9,12 @@
     {% if user.is_authenticated %}
         {% for article in articles %}
             <div class="card pb-3 dropdown">
-                <div class="card-header d-flex">
-                    <span class="font-weight-bold">
-                        {% if article.author == user %}
-                            <a href="{% url 'article_edit' article.pk %}">{{ article.title }}</a>
-                        {% else %}
-                            {{ article.title }}
-                        {% endif %}
+                <div class="card-header d-flex  cabeza">
+                    <span class="font-weight-bold b">
+                        <img style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid img-user me-1" 
+                            src="{% if article.author.image and article.author.image.url %}{{ article.author.image.url }}{% else %}{% static 'img/user.png' %}{% endif %}" alt="{{ article.author }}">
                     </span>&middot;
-                    <span class="text-muted">by {{ article.author }} | {{ article.date }}</span>
+                    <span class="text-muted"><strong>{{ article.title }}</strong>  | {{ article.date }}</span>
 
                     {% if article.author.username == request.user.username %}
                         <!-- Botón con tres puntos -->
@@ -44,7 +41,7 @@
                 <div class="card-body">
                     {% if article.article_images_related.exists %}
                         <!-- Carrusel de imágenes -->
-                        <div class="container_carru" id="carousel-{{ article.id }}">
+                        <div class="container_carru container-fluid" id="carousel-{{ article.id }}">
                             <div class="actions" id="actions-{{ article.id }}">
                                 <a class="arrow btn" id="arrowleft-{{ article.id }}">⏪</a>
                                 <a class="arrow btn" id="arrowrigth-{{ article.id }}">⏩</a>
@@ -67,7 +64,7 @@
 
                 <div class="card-footer text-start">
                     <!-- Botón para mostrar u ocultar comentarios -->
-                    <button class="btn btn-outline-secondary Comentarios" type="button" data-bs-toggle="collapse" data-bs-target="#commentsSection{{ article.id }}" aria-expanded="false" aria-controls="commentsSection">
+                    <button class="btn btn-secondary Comentarios" type="button" data-bs-toggle="collapse" data-bs-target="#commentsSection{{ article.id }}" aria-expanded="false" aria-controls="commentsSection">
                         Comentarios
                     </button>
                 
@@ -82,7 +79,7 @@
                                                 src="{% if comment.author.image and comment.author.image.url %}{{ comment.author.image.url }}{% else %}{% static 'img/user.png' %}{% endif %}" 
                                                 alt="{{ comment.author.username }}">
                                             <span class="font-weight-bold">{{ comment.author }} &middot;</span>
-                                            <span>{{ comment.comment }}</span>
+                                            <span class="ms-1">{{ comment.comment }}</span>
                                         </div>
                                     </div>
 
