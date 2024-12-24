@@ -46,6 +46,7 @@
                                 <a class="arrow btn" id="arrowleft-{{ article.id }}">⏪</a>
                                 <a class="arrow btn" id="arrowrigth-{{ article.id }}">⏩</a>
                             </div>
+                            <!-- condicionales que nos ayuda a indentificar si hay mas de una imagen o mas de tres -->
                             <div class="items" id="items-{{ article.id }}">
                                 {% with article.article_images_related.all|length as image_count %}
                                     {% for image in article.article_images_related.all %}

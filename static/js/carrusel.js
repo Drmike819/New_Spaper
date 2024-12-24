@@ -1,9 +1,14 @@
+// indica que el codigo entrara en funcion cuando el documento este cargado completamente
 document.addEventListener("DOMContentLoaded", () => {
+    // busca todos los carruseles en el documento
     let allCarousels = document.querySelectorAll('.container_carru');
-    
+    // recorre todos los carruseles
     allCarousels.forEach(carousel => {
+        // obtiene el id del carrusel
         let articleId = carousel.id.split('-')[1];
+        // busca todos los items del carrusel
         let items = carousel.querySelectorAll('.carousel-item');
+        // inicializa el indice actual
         let currentIndex = 0;
 
         // Si solo hay una imagen, céntrala y termina

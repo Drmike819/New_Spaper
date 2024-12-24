@@ -4,13 +4,16 @@ from articles.forms import CommentForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
-#renderizacion de la pagina principal 
+#renderizacion de la pagina principal
 @login_required
 def HomePageView(request):
+    # llamamos a todos los campos y objetos del mopdelo articles
     articles = Article.objects.all()
+    # indicamos un formulario de comentarios para utilizarlo en el templkate
     form = CommentForm()
-
+    # verifica el metodo de llamado
     if request.method == "POST":
+        
         form = CommentForm(request.POST)
         if form.is_valid():
             # Guardar el comentario sin comprometerlo a la base de datos todavía

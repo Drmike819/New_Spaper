@@ -155,9 +155,13 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         else:
             return self.form_invalid(form)
     
+# vista para actualizar un comentario
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    # indicamos el modelo que vamos a utilizar
     model = Comment
+    # iondicamos el formulario que utilizaremos
     form_class = CommentForm
+    # indicamos el templkat que utilizaremos
     template_name = 'comment_edit.html'
     
     def test_func(self):

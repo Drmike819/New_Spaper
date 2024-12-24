@@ -1,38 +1,48 @@
+// indica que el el codigo entrara en funcion cuando el documento este cargado completamente
 document.addEventListener('DOMContentLoaded', function() {
-    // Comprobar si el modo oscuro está guardado en las cookies
+   // obtiene las cookies que almecena la pagina actualmente
     const cookies = document.cookie.split('; ');
+    // busca la cookies dark_mode
     const darkModeCookie = cookies.find(cookie => cookie.startsWith('dark_mode='));
-
-    // Establecer el estado inicial del modo oscuro y el icono del botón
+    // verifica si las cookie se encontro
     if (darkModeCookie) {
+        // obtiene el valor de la cookie
         const isDarkMode = darkModeCookie.split('=')[1] === 'true';
+        // verifica el valor de la cookie TRUE
         if (isDarkMode) {
+            // agrega la clase dark-mode al documento html
             document.body.classList.add('dark-mode');
-            document.getElementById('modoJH').innerHTML = '🌞';  // Cambiar el icono a sol
+            // cambia el icono de la luna a sol
+            document.getElementById('modoJH').innerHTML = '🌞';
         } else {
-            document.getElementById('modoJH').innerHTML = '🌙';  // Cambiar el icono a luna
+            // valor por defecto del icono
+            document.getElementById('modoJH').innerHTML = '🌙'; 
         }
     } else {
-        // Si no hay cookie, establecer el icono por defecto (luna) y no activar el modo oscuro
-        document.getElementById('modoJH').innerHTML = '🌙';  // Luna
+        // valor por defecto del icono
+        document.getElementById('modoJH').innerHTML = '🌙';
     }
 
-    // Alternar el modo oscuro y el icono cuando el botón es clickeado
+    // obtiene el boton de modo oscuro
     const toggleButton = document.getElementById('modoJH');
+    // agrega la accion del boton del modo oscuro
     if (toggleButton) {
+        // agrega la accion de click al boton
         toggleButton.addEventListener('click', () => {
+            // cambia el modo oscuro o modo normal por cada click
             document.body.classList.toggle('dark-mode');
 
-            // Cambiar el icono según el modo
+            // verifica si el modo oscuro esta activado
             const isDarkMode = document.body.classList.contains('dark-mode');
             if (isDarkMode) {
-                toggleButton.innerHTML = '🌞';  // Sol para modo oscuro
+                // si esta activado el icono es el del sol
+                toggleButton.innerHTML = '🌞';
+            // de lo contrario se muestra el modo predeterminado
             } else {
-                toggleButton.innerHTML = '🌙';  // Luna para modo claro
+                toggleButton.innerHTML = '🌙';
             }
-
-            // Guardar la preferencia en las cookies
-            document.cookie = `dark_mode=${isDarkMode}; path=/; max-age=31536000`; // Expira en 1 año
+            // guarda el estado del modo oscuro en una cookie e indica la duracion de la cookie
+            document.cookie = `dark_mode=${isDarkMode}; path=/; max-age=31536000`;
         });
     }
 });

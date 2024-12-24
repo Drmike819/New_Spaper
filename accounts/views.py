@@ -33,17 +33,23 @@ def user_logout(request):
 
 @login_required
 def update_profile_image(request):
-    user = request.user  # Obtén el usuario autenticado
+    # obtiene a el usuario que esta logeado
+    user = request.user
+    # verifica el metodo de pregunta
     if request.method == 'POST':
+        # llama al formulario para que lo  muestre en pantalla
         form = UpdateProfileImageForm(request.POST, request.FILES, instance=user)
+        # s el formulario se ejecuto de forma correcta 
         if form.is_valid():
-            form.save()  # Guarda el formulario y actualiza la imagen
+            # se guarda la imagen subida
+            form.save()
             messages.success(request, "¡Imagen de perfil actualizada con éxito!")
             return redirect('home')  # Redirige a la página de inicio o la que prefieras
+        # si hay un error en el formulario se mustra un mensaje de error en consola
         else:
             messages.error(request, "Hubo un error al actualizar tu imagen de perfil. Por favor, intenta nuevamente.")
             print(form.errors)  # Esto imprime los errores en la consola para depuración
     else:
         form = UpdateProfileImageForm(instance=user)  # Instancia del usuario autenticado
-
+    # nos retorna a la vista de actualizacion de foto de perfil
     return render(request, 'update_profile_image.html', {'form': form})
