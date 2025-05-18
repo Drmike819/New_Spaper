@@ -48,15 +48,15 @@ class CommentPost(LoginRequiredMixin, SingleObjectMixin, FormView):
         return reverse('home')
 
 # Vista que combina las operaciones GET y POST para el detalle de un artículo y la creación de comentarios      
-class ArticleDetailView(LoginRequiredMixin, View):
-    def get(self, request, *args, **kwargs):
-        # Llamamos a la vista CommentGet para manejar la vista de detalles del artículo
-        view = CommentGet.as_view()
-        return view(request, *args, **kwargs)
-     # Llamamos a la vista CommentPost para manejar la creación de un comentario
-    def post(self, request, *args, **kwargs):
-        view = CommentPost.as_view()
-        return view(request, *args, **kwargs)
+# class ArticleDetailView(LoginRequiredMixin, View):
+#     def get(self, request, *args, **kwargs):
+#         # Llamamos a la vista CommentGet para manejar la vista de detalles del artículo
+#         view = CommentGet.as_view()
+#         return view(request, *args, **kwargs)
+#      # Llamamos a la vista CommentPost para manejar la creación de un comentario
+#     def post(self, request, *args, **kwargs):
+#         view = CommentPost.as_view()
+#         return view(request, *args, **kwargs)
 
 # Vista para actualizar un artículo        
 class ArticleUpdateView(LoginRequiredMixin, UpdateView):
@@ -191,3 +191,28 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 # class ArticlesList(LoginRequiredMixin, ListView):
 #     model = Article
 #     template_name ='articles_list.html'
+
+def ArticleDetailView(request, pk):
+    # Obtener el artículo por su PK
+    article = get_object_or_404(Article, pk=pk)
+
+    # Agregar los comentarios al artículo
+    article.comments = article.comment_set.all()  # Esto asigna los comentarios del artículo
+
+    # Formulario de comentarios
+    form = CommentForm()
+    
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.article = article  # Relacionar el comentario con el artículo
+            comment.author = request.user
+            comment.save()
+            return redirect("article_detail", pk=article.pk)  # Redirigir al detalle del artículo
+
+    # Pasar el artículo y el formulario al contexto
+    return render(request, "article_detail.html", {
+        'article': article,
+        'form': form
+    })

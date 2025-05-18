@@ -7,127 +7,147 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-        {% for article in articles %}
-            <div class="card mt-3 dropdown">
-                <div class="card-header d-flex  header-and-footer">
-                    <span class="font-weight-bold b">
-                        <img style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid img-user me-1" 
-                            src="{% if article.author.image and article.author.image.url %}{{ article.author.image.url }}{% else %}{% static 'img/user.png' %}{% endif %}" alt="{{ article.author }}">
-                    </span>&middot;
-                    <span class="text-muted"><strong>{{ article.title }}</strong>  | {{ article.date }}</span>
-
-                    {% if article.author.username == request.user.username %}
-                        <!-- Botón con tres puntos -->
-                        <button class="btn btn-secondary ms-auto" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                            &#x22EE; <!-- Tres puntos verticales -->
-                        </button>
-                
-                        <!-- Opciones del menú desplegable -->
-                        <ul class="dropdown-menu text-end" aria-labelledby="dropdownMenuButton">
-                            <li>
-                                <a class="dropdown-item link-iditar-eliminar" href="{% url 'article_edit' article.pk %}">
-                                    <p>Edit</p>
+        <div class="container-fluid">
+            <div class="row m-3">
+                <!-- Sección principal de artículos -->
+                <div class="col-9">
+                    {% for article in articles %}
+                        <div class="card mt-3 dropdown container-article" id="{{ article.id }}">
+                            <div class="card-header d-flex header-and-footer container-fluid">
+                                <span class="font-weight-bold b">
+                                    <img style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid img-user me-1" 
+                                        src="{% if article.author.image and article.author.image.url %}{{ article.author.image.url }}{% else %}{% static 'img/user.png' %}{% endif %}" alt="{{ article.author }}">
+                                </span>&middot;
+                                <a href="{% url 'article_detail' article.pk %}" class="text-decoration-none mt-2">
+                                    <span class="mt-2"><strong>{{ article.title }}</strong></span>
                                 </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item link-iditar-eliminar " href="{% url 'article_delete' article.pk %}">
-                                    <p class="text-danger">Delete</p>
-                                </a>
-                            </li>
-                        </ul>
-                    {% endif %}
-                </div>
-                
-                <div class="card-body">
-                    {% if article.article_images_related.exists %}
-                        <!-- Carrusel de imágenes -->
-                        <div class="container_carru container-fluid" id="carousel-{{ article.id }}">
-                            <div class="actions" id="actions-{{ article.id }}">
-                                <a class="arrow btn" id="arrowleft-{{ article.id }}">⏪</a>
-                                <a class="arrow btn" id="arrowrigth-{{ article.id }}">⏩</a>
-                            </div>
-                            <!-- condicionales que nos ayuda a indentificar si hay mas de una imagen o mas de tres -->
-                            <div class="items" id="items-{{ article.id }}">
-                                {% with article.article_images_related.all|length as image_count %}
-                                    {% for image in article.article_images_related.all %}
-                                        <img src="{{ image.image.url }}" 
-                                             class="carousel-item carousel-imagen 
-                                                    {% if image_count == 1 %}img_center_single{% 
-                                                    elif forloop.first %}img_center{% 
-                                                    else %}img_left{% endif %}" 
-                                             alt="Article Image">
-                                    {% endfor %}
-                                {% endwith %}
-                            </div>
-                        </div>
-                                               
-                    {% else %}
-                        <!-- Mensaje si no hay imágenes -->
-                        <p class="text-justify">No images available for this article.</p>
-                    {% endif %}
-                
-                    <!-- Texto del artículo -->
-                    <p class="pt-5 ps-5 pe-5 text-justify">{{ article.body }}</p>
-                </div>
-                
 
-                <div class="card-footer text-start header-and-footer">
-                    <!-- Botón para mostrar u ocultar comentarios -->
-                    <button class="btn btn-secondary Comentarios" type="button" data-bs-toggle="collapse" data-bs-target="#commentsSection{{ article.id }}" aria-expanded="false" aria-controls="commentsSection">
-                        Comentarios
-                    </button>
-                
-                    <!-- Sección de comentarios colapsable -->
-                    <div class="collapse" id="commentsSection{{ article.id }}">
-                        <!-- Recorre y imprime los comentarios del articulo mostrando la imagen de usuario el nombre y el comentario -->
-                        {% for comment in article.comment_set.all %}
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <div class="col-9">
-                                        <div class="comment p-2">
-                                            <img style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid img-user" 
-                                                src="{% if comment.author.image and comment.author.image.url %}{{ comment.author.image.url }}{% else %}{% static 'img/user.png' %}{% endif %}" 
-                                                alt="{{ comment.author.username }}">
-                                            <span class="font-weight-bold">{{ comment.author }} &middot;</span>
-                                            <span class="ms-1">{{ comment.comment }}</span>
+                                {% if article.author.username == request.user.username %}
+                                    <button class="btn ms-auto" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <strong> &#x22EE;</strong>
+                                    </button>
+                                    <ul class="dropdown-menu text-end" aria-labelledby="dropdownMenuButton">
+                                        <li>
+                                            <a class="dropdown-item link-iditar-eliminar" href="{% url 'article_edit' article.pk %}">
+                                                <p>Edit</p>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item link-iditar-eliminar text-danger" href="{% url 'article_delete' article.pk %}">
+                                                <p class="text-danger">Delete</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                {% endif %}
+                            </div>
+
+                            <div class="card-body container-fluid">
+                                {% if article.article_images_related.exists %}
+                                    <div class="container_carru container-fluid" id="carousel-{{ article.id }}">
+                                        <div class="actions" id="actions-{{ article.id }}">
+                                            <a class="arrow btn" id="arrowleft-{{ article.id }}">⏪</a>
+                                            <a class="arrow btn" id="arrowrigth-{{ article.id }}">⏩</a>
+                                        </div>
+                                        <div class="items" id="items-{{ article.id }}">
+                                            {% with article.article_images_related.all|length as image_count %}
+                                                {% for image in article.article_images_related.all %}
+                                                    <img src="{{ image.image.url }}" 
+                                                        class="carousel-item carousel-imagen 
+                                                                {% if image_count == 1 %}img_center_single{% 
+                                                                elif forloop.first %}img_center{% 
+                                                                else %}img_left{% endif %}" 
+                                                        alt="Article Image">
+                                                {% endfor %}
+                                            {% endwith %}
                                         </div>
                                     </div>
+                                {% else %}
+                                    <p class="text-justify">No images available for this article.</p>
+                                {% endif %}
 
-                                    <div class="col-3">
-                                        <!-- Indicaa que si el usuario que esta logeado es el creador puede ver las opciones de eliminar y editar -->
-                                        {% if comment.author == user %}
-                                            <div class="dropdown d-inline text-end">
-                                                <button class="btn btn-sm puntos" type="button" id="dropdownMenuButton{{ comment.id }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    &#x22EE;
-                                                </button>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ comment.id }}">
-                                                    <li><a class="dropdown-item" href="{% url 'comment_edit' comment.pk %}"><p>Edit</p></a></li>
-                                                    <li><a class="dropdown-item text-danger" href="{% url 'comment_delete' comment.pk %}"> <p class="text-danger">Delete</p></a></li>
-                                                </ul>
+                                <p class="text-justify m-3" style="text-align: justify;">{{ article.body }}</p>
+                            </div>
+
+                            <div class="card-footer text-start header-and-footer container-fluid">
+                                <button class="btn btn-secondary Comentarios" type="button" data-bs-toggle="collapse" data-bs-target="#commentsSection{{ article.id }}" aria-expanded="false" aria-controls="commentsSection">
+                                    Comentarios
+                                </button>
+
+                                <div class="collapse" id="commentsSection{{ article.id }}">
+                                    {% for comment in article.comment_set.all %}
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-9">
+                                                    <div class="comment p-2">
+                                                        <img style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid img-user" 
+                                                            src="{% if comment.author.image and comment.author.image.url %}{{ comment.author.image.url }}{% else %}{% static 'img/user.png' %}{% endif %}" 
+                                                            alt="{{ comment.author.username }}">
+                                                        <span class="font-weight-bold">{{ comment.author }} &middot;</span>
+                                                        <span class="ms-1">{{ comment.comment }}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-3 text-end">
+                                                    {% if comment.author == user %}
+                                                        <div class="dropdown d-inline">
+                                                            <button class="btn btn-sm puntos" type="button" id="dropdownMenuButton{{ comment.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                &#x22EE;
+                                                            </button>
+                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ comment.id }}">
+                                                                <li><a class="dropdown-item" href="{% url 'comment_edit' comment.pk %}">Edit</a></li>
+                                                                <li><a class="dropdown-item text-danger" href="{% url 'comment_delete' comment.pk %}">Delete</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
                                             </div>
-                                        {% endif %}
-                                    </div>
+                                        </div>
+                                    {% endfor %}
+
+                                    <!-- Formulario de comentario -->
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        {{ form|crispy }}
+                                        <input type="hidden" name="article_id" value="{{ article.id }}">
+                                        <button class="btn btn-success ml-2" type="submit">Save</button>
+                                    </form>
                                 </div>
                             </div>
-                        {% endfor %}
-                        <!-- Formulari para añadir un comentario -->
-                        <h4>Add a comment</h4>
-                        <form method="POST">
-                            {% csrf_token %}
-                            {{ form|crispy }}
-                            <input type="hidden" name="article_id" value="{{ article.id }}">
-                            <button class="btn btn-success ml-2" type="submit">Save</button>
-                        </form>
-                    </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Columna de artículos random -->
+                <div class="col-3 sticky-sidebar" style="height: 90vh; overflow-y: auto; position: sticky; top: 10px;">
+                    <H3 class="text-center">Articulos recomendados</H3>
+                    {% for article in random_articles %}
+                        <a href="{% url 'article_detail' article.pk %}" class="text-decoration-none">
+                            <div class="card mb-3">
+                                <div class="card-header d-flex align-items-center">
+                                    <img style="height: 30px; width: 30px; border-radius: 50%;" 
+                                        src="{% if article.author.image and article.author.image.url %}{{ article.author.image.url }}{% else %}{% static 'img/user.png' %}{% endif %}" 
+                                        alt="{{ article.author }}" class="me-2">
+                                    <strong class="text-center">{{ article.title }}</strong>
+                                </div>
+                                <div class="card-body text-center">
+                                    {% with article.article_images_related.all|first as first_image %}
+                                        {% if first_image %}
+                                            <img src="{{ first_image.image.url }}" class="img-fluid rounded" alt="Article Image">
+                                        {% else %}
+                                            <p class="text-muted">No image available</p>
+                                        {% endif %}
+                                    {% endwith %}
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
                 </div>
             </div>
-            <br />
-        {% endfor %}
+        </div>
+
     {% else %}
         <p>You are not logged in</p>
         <a href="{% url 'login' %}">Log In</a>
         <a href="{% url 'signup' %}">Sign Up</a>
     {% endif %}
-
 {% endblock content %}
-

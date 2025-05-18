@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}{{ article.title }}{% endblock title %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="card mt-3 dropdown container-article" id="{{ article.id }}">
+        <div class="card-header d-flex header-and-footer container-fluid">
+            <span class="font-weight-bold b">
+                <img style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid img-user me-1" 
+                     src="{% if article.author.image and article.author.image.url %}{{ article.author.image.url }}{% else %}{% static 'img/user.png' %}{% endif %}" alt="{{ article.author }}"/>
+            </span>&middot;
+            <span class="mt-2"><strong>{{ article.title }}</strong></span>
+
+            {% if article.author.username == request.user.username %}
+                <button class="btn ms-auto" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <strong> &#x22EE;</strong>
+                </button>
+                <ul class="dropdown-menu text-end" aria-labelledby="dropdownMenuButton">
+                    <li>
+                        <a class="dropdown-item link-iditar-eliminar" href="{% url 'article_edit' article.pk %}">
+                            <p>Edit</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item link-iditar-eliminar text-danger" href="{% url 'article_delete' article.pk %}">
+                            <p class="text-danger">Delete</p>
+                        </a>
+                    </li>
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="card-body container-fluid">
+            {% if article.article_images_related.exists %}
+                <div class="container_carru container-fluid" id="carousel-{{ article.id }}">
+                    <div class="actions" id="actions-{{ article.id }}">
+                        <a class="arrow btn" id="arrowleft-{{ article.id }}">⏪</a>
+                        <a class="arrow btn" id="arrowrigth-{{ article.id }}">⏩</a>
+                    </div>
+                    <div class="items" id="items-{{ article.id }}">
+                        {% with article.article_images_related.all|length as image_count %}
+                            {% for image in article.article_images_related.all %}
+                                <img src="{{ image.image.url }}" 
+                                     class="carousel-item carousel-imagen 
+                                            {% if image_count == 1 %}
+                                                img_center_single
+                                            {% elif forloop.first %}
+                                                img_center
+                                            {% else %}
+                                                img_left
+                                            {% endif %}" 
+                                     alt="Article Image">
+                            {% endfor %}
+                        {% endwith %}
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-justify">No images available for this article.</p>
+            {% endif %}
+
+            <p class="text-justify m-3" style="text-align: justify;">{{ article.body }}</p>
+        </div>
+
+        <div class="card-footer text-start header-and-footer container-fluid">
+            <button class="btn btn-secondary Comentarios" type="button" data-bs-toggle="collapse" data-bs-target="#commentsSection{{ article.id }}" aria-expanded="false" aria-controls="commentsSection">
+                Comentarios
+            </button>
+
+            <div class="collapse" id="commentsSection{{ article.id }}">
+                {% for comment in article.comment_set.all %}
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-9">
+                                <div class="comment p-2">
+                                    <img style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid img-user" 
+                                         src="{% if comment.author.image and comment.author.image.url %}{{ comment.author.image.url }}{% else %}{% static 'img/user.png' %}{% endif %}" 
+                                         alt="{{ comment.author.username }}">
+                                    <span class="font-weight-bold">{{ comment.author }} &middot;</span>
+                                    <span class="ms-1">{{ comment.comment }}</span>
+                                </div>
+                            </div>
+
+                            <div class="col-3 text-end">
+                                {% if comment.author == user %}
+                                    <div class="dropdown d-inline">
+                                        <button class="btn btn-sm puntos" type="button" id="dropdownMenuButton{{ comment.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                            &#x22EE;
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ comment.id }}">
+                                            <li><a class="dropdown-item" href="{% url 'comment_edit' comment.pk %}">Edit</a></li>
+                                            <li><a class="dropdown-item text-danger" href="{% url 'comment_delete' comment.pk %}">Delete</a></li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <!-- Formulario de comentario -->
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <input type="hidden" name="article_id" value="{{ article.id }}">
+                    <button class="btn btn-success ml-2" type="submit">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% else %}
+<p>You are not logged in</p>
+<a href="{% url 'login' %}">Log In</a>
+<a href="{% url 'signup' %}">Sign Up</a>
+{% endif %}
+
+{% endblock %}

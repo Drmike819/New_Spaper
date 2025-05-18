@@ -13,14 +13,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Si solo hay una imagen, céntrala y termina
         if (items.length === 1) {
+            // verifica si hay una unica imagen y le agrega una clase
             items[0].classList.add('img_center_single');
             return;
         }
 
         // Marcar imágenes adicionales si hay más de 3
         if (items.length > 3) {
+            // recorre los items
             items.forEach((item, index) => {
+                // verifica si hay mas de 3
                 if (index >= 3) {
+                    // si hay mas de 3 le añade la clase additional
                     item.classList.add('additional');
                 }
             });
@@ -28,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Función para actualizar las clases del carrusel
         function updateCarousel() {
+            // recorre los items
             items.forEach((item, index) => {
                 // Quitar clases existentes
                 item.classList.remove('img_center', 'img_left', 'img_rigth', 'additional');
